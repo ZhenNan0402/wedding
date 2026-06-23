@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wedding Invitation</title>
-  <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap)" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
   <style>
     /* THEME STYLES GO HERE - see individual themes below */
 	:root {
@@ -53,14 +53,19 @@ button[type="submit"] { width: 100%; padding: 15px; background: var(--gold); col
 
     <!-- RSVP Section -->
     <section class="rsvp">
-      <h2>RSVP</h2>
       <form id="rsvpForm">
-        <input type="text" id="name" placeholder="Your Name" required>
-        <input type="number" id="seats" placeholder="Number of Seats" min="1" max="10" required>
-        <button type="submit">Confirm Attendance</button>
-      </form>
-      <p id="message"></p>
+  <input type="text" name="name" id="name" placeholder="Your Name" required>
+  
+  <input type="text" name="wish" id="wish" placeholder="Wish" required>
+
+  <input type="number" name="seats" id="seats" placeholder="Number of Seats" min="1" max="10" required>
+
+  <button type="submit">Confirm Attendance</button>
+ <p id="message"></p>
+</form>
+     
     </section>
+	
   </div>
 
   <script>
@@ -78,33 +83,36 @@ button[type="submit"] { width: 100%; padding: 15px; background: var(--gold); col
 
     // RSVP Form Submission
     document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const name = document.getElementById('name').value;
-      const seats = document.getElementById('seats').value;
-      const messageEl = document.getElementById('message');
-      
-      // Replace with your Apps Script URL
-      const scriptURL = 'YOUR_APPS_SCRIPT_URL_HERE';
-      
-      try {
-        messageEl.textContent = 'Sending...';
-        
-        await fetch(scriptURL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, seats })
-        });
-        
-        messageEl.textContent = 'Thank you! Your RSVP has been received.';
-        messageEl.style.color = '#4CAF50';
-        e.target.reset();
-        
-      } catch (error) {
-        messageEl.textContent = 'Error submitting. Please try again.';
-        messageEl.style.color = '#f44336';
-      }
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const seats = document.getElementById('seats').value;
+  const wish = document.getElementById('wish').value;
+  const messageEl = document.getElementById('message');
+
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyhSzlJ9Ct7Qm7RbfU8CkAS93H77pmuXJPOi-zISx9tLV3Axb_DhGOTcPQQKhDlSNOwxw/exec';
+
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('seats', seats);
+  formData.append('wish', wish);
+
+  try {
+    messageEl.textContent = 'Sending...';
+
+    await fetch(scriptURL, {
+      method: 'POST',
+      body: formData
+    });
+
+    messageEl.textContent = 'Thank you! Your RSVP has been received 🎉';
+    messageEl.style.color = '#4CAF50';
+    e.target.reset();
+
+  } catch (error) {
+    messageEl.textContent = 'Error submitting. Please try again.';
+    messageEl.style.color = '#f44336';
+  }
     });
   </script>
 
