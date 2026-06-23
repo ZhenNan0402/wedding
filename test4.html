@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation</title>
+  <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap)" rel="stylesheet">
+  <style>
+    /* THEME STYLES GO HERE - see individual themes below */
+	:root {
+  --primary: #c41e3a;
+  --gold: #d4af37;
+  --dark: #8b0000;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Playfair Display', serif;
+  background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+  color: #fff;
+  min-height: 100vh;
+}
+.container { max-width: 600px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+.hero::before { content: "囍"; font-size: 4rem; color: var(--gold); display: block; margin-bottom: 20px; }
+.hero h1 { font-size: 2.5rem; color: var(--gold); margin: 20px 0; }
+.date, .venue { color: #ffcccc; }
+.couple-photo { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 5px solid var(--gold); box-shadow: 0 0 30px rgba(212,175,55,0.5); }
+.rsvp { margin-top: 50px; padding: 30px; border: 2px solid var(--gold); background: rgba(0,0,0,0.2); }
+.rsvp h2 { color: var(--gold); }
+input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid var(--gold); background: rgba(255,255,255,0.1); color: #fff; font-size: 1rem; }
+input::placeholder { color: #ffcccc; }
+button[type="submit"] { width: 100%; padding: 15px; background: var(--gold); color: #8b0000; border: none; font-size: 1rem; font-weight: bold; cursor: pointer; }
+.music-btn { position: fixed; top: 20px; right: 20px; background: var(--gold); border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; }
+#message { margin-top: 15px; }
+
+  </style>
+</head>
+<body>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="music/Lyrics.mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-btn" onclick="toggleMusic()">🎵</button>
+
+  <div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <img src="image/ryan.png" alt="Couple Photo" class="couple-photo">
+      <h1>Ryan & Priscillaaa</h1>
+      <p class="date">June 15, 2027</p>
+      <p class="venue">JU Banquet & Restaurant 聚苑酒家(IOI City Mall 2)</p>
+    </section>
+
+    <!-- RSVP Section -->
+    <section class="rsvp">
+      <h2>RSVP</h2>
+      <form id="rsvpForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="number" id="seats" placeholder="Number of Seats" min="1" max="10" required>
+        <button type="submit">Confirm Attendance</button>
+      </form>
+      <p id="message"></p>
+    </section>
+  </div>
+
+  <script>
+    // Music Toggle
+    let isPlaying = false;
+    function toggleMusic() {
+      const music = document.getElementById('bgMusic');
+      if (isPlaying) {
+        music.pause();
+      } else {
+        music.play();
+      }
+      isPlaying = !isPlaying;
+    }
+
+    // RSVP Form Submission
+    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const seats = document.getElementById('seats').value;
+      const messageEl = document.getElementById('message');
+      
+      // Replace with your Apps Script URL
+      const scriptURL = 'YOUR_APPS_SCRIPT_URL_HERE';
+      
+      try {
+        messageEl.textContent = 'Sending...';
+        
+        await fetch(scriptURL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, seats })
+        });
+        
+        messageEl.textContent = 'Thank you! Your RSVP has been received.';
+        messageEl.style.color = '#4CAF50';
+        e.target.reset();
+        
+      } catch (error) {
+        messageEl.textContent = 'Error submitting. Please try again.';
+        messageEl.style.color = '#f44336';
+      }
+    });
+  </script>
+
+</body>
+</html>
